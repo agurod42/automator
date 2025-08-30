@@ -59,18 +59,53 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>for f in "$@"
+					<string>#!/bin/zsh
+
+# Ensure Homebrew is installed
+if ! command -v brew &amp;&gt;/dev/null; then
+    echo "Homebrew not found. Installing..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    if [[ -d "/opt/homebrew/bin" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"   # Apple Silicon
+    elif [[ -d "/usr/local/bin" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"      # Intel
+    fi
+fi
+
+# Ensure ImageMagick is installed
+if ! command -v magick &amp;&gt;/dev/null; then
+    echo "ImageMagick not found. Installing..."
+    brew install imagemagick
+fi
+
+# Compress images
+for f in "$@"
 do
     ext="${f##*.}"
     base="${f%.*}"
     out="${base}_compressed.${ext}"
 
-    magick "$f" -strip -interlace Plane -quality 75 "$out"
+    case "${ext:l}" in
+        jpg|jpeg)
+            magick "$f" -strip -auto-orient -interlace Plane -quality 75 "$out"
+            ;;
+        png)
+            magick "$f" -strip -auto-orient -define png:compression-level=9 -define png:exclude-chunk=all "$out"
+            ;;
+        *)
+            echo "Unsupported format: $f"
+            ;;
+    esac
+
+    echo "Compressed: $out"
 done</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
-					<integer>0</integer>
+					<integer>1</integer>
+					<key>shell</key>
+					<string>/bin/zsh</string>
 					<key>source</key>
 					<string></string>
 				</dict>
@@ -179,7 +214,7 @@ done</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>540.000000:305.000000</string>
+				<string>394.500000:305.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
