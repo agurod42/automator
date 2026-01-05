@@ -27,3 +27,15 @@ Install Ghostscript via Homebrew:
 ```sh
 brew install ghostscript
 ```
+
+### Convert to PNG
+
+This service converts each page of a PDF into PNG files using ImageMagick and Ghostscript.
+
+#### Requirements
+
+Install ImageMagick and Ghostscript via Homebrew:
+
+```sh
+brew install imagemagick ghostscript
+```
