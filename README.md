@@ -39,3 +39,15 @@ Install ImageMagick and Ghostscript via Homebrew:
 ```sh
 brew install imagemagick ghostscript
 ```
+
+### Trim Transparent Pixels
+
+This service trims fully transparent borders from images and saves a new file beside the original with a `_trimmed` suffix.
+
+#### Requirements
+
+Install ImageMagick via Homebrew:
+
+```sh
+brew install imagemagick
+```
