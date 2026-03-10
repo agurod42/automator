@@ -82,9 +82,8 @@ fi
 # Trim transparent borders without cropping opaque images that merely share a flat edge color
 for f in "$@"
 do
-    ext="${f##*.}"
     base="${f%.*}"
-    out="${base}_trimmed.${ext}"
+    out="${base}_trimmed.png"
 
     if [[ "$(magick identify -format '%[opaque]' "$f" 2&gt;/dev/null)" == "True" ]]; then
         echo "Skipped (no transparent pixels found): $f"
@@ -118,7 +117,7 @@ do
         continue
     fi
 
-    magick "$f" -auto-orient -crop "$trim_geometry" +repage "$out"
+    magick "$f" -auto-orient -crop "$trim_geometry" +repage PNG32:"$out"
     echo "Trimmed: $out"
 done</string>
 					<key>CheckedForUserDefaultShell</key>
