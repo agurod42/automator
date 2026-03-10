@@ -51,3 +51,11 @@ Install ImageMagick via Homebrew:
 ```sh
 brew install imagemagick
 ```
+
+## Development
+
+Regenerate the workflow icon set with:
+
+```sh
+python3 scripts/generate_workflow_icons.py
+```

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="164" y1="124" x2="882" y2="910" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFB28F"/>
+      <stop offset="100%" stop-color="#E64B4B"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(276 220) rotate(39) scale(488 442)">
+      <stop offset="0%" stop-color="#FFE0D2" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#FFE0D2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="252" y1="190" x2="794" y2="860" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.09"/>
+    </linearGradient>
+    <linearGradient id="surface" x1="272" y1="246" x2="728" y2="784" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E7F0FF"/>
+    </linearGradient>
+    <linearGradient id="surfaceShade" x1="384" y1="290" x2="684" y2="764" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#B9C9E3" stop-opacity="0.55"/>
+    </linearGradient>
+    <filter id="baseShadow" x="24" y="24" width="976" height="976" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#14243B" flood-opacity="0.18"/>
+    </filter>
+    <filter id="objectShadow" x="120" y="120" width="784" height="784" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#11243F" flood-opacity="0.18"/>
+    </filter>
+    <clipPath id="iconClip">
+      <rect x="80" y="80" width="864" height="864" rx="216"/>
+    </clipPath>
+  
+    <clipPath id="trimGrid">
+      <rect x="332" y="332" width="360" height="360" rx="84"/>
+    </clipPath>
+
+  </defs>
+  <g filter="url(#baseShadow)">
+    <rect x="80" y="80" width="864" height="864" rx="216" fill="url(#bg)"/>
+    <rect x="98" y="98" width="828" height="828" rx="198" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="12"/>
+  </g>
+  <g clip-path="url(#iconClip)">
+    <circle cx="308" cy="246" r="300" fill="url(#orb)"/>
+    <ellipse cx="762" cy="856" rx="312" ry="174" fill="#0A1730" fill-opacity="0.08"/>
+    <path d="M136 168C246 116 414 92 596 112C738 128 832 164 892 210V342C796 294 646 266 484 266C328 266 198 292 136 326V168Z" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect x="184" y="184" width="656" height="656" rx="176" fill="url(#glass)"/>
+    <rect x="184" y="184" width="656" height="656" rx="176" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="10"/>
+  </g>
+  
+  <g filter="url(#objectShadow)">
+    <path d="M304 248H560L714 402V704C714 744 682 776 642 776H304C264 776 232 744 232 704V320C232 280 264 248 304 248Z" fill="url(#surface)"/>
+    <path d="M560 248V358C560 390 586 416 618 416H714" fill="#F4F8FF"/>
+    <path d="M560 248V358C560 390 586 416 618 416H714" stroke="#D8E4F6" stroke-width="18" stroke-linejoin="round"/>
+    <path d="M304 248H560L714 402V704C714 744 682 776 642 776H304C264 776 232 744 232 704V320C232 280 264 248 304 248Z" stroke="#FFFFFF" stroke-width="12"/>
+    <path d="M320 330H484" stroke="#7B1E2F" stroke-opacity="0.12" stroke-width="22" stroke-linecap="round"/>
+    <path d="M320 382H512" stroke="#7B1E2F" stroke-opacity="0.12" stroke-width="22" stroke-linecap="round"/>
+    <path d="M320 434H468" stroke="#7B1E2F" stroke-opacity="0.12" stroke-width="22" stroke-linecap="round"/>
+    <rect x="232" y="248" width="482" height="528" rx="72" fill="url(#surfaceShade)"/>
+    
+      <rect x="322" y="548" width="302" height="96" rx="48" fill="#FFB28F" fill-opacity="0.20"/>
+      <path d="M356 596H588" stroke="#7B1E2F" stroke-opacity="0.18" stroke-width="18" stroke-linecap="round"/>
+    
+  </g>
+
+  <g filter="url(#objectShadow)">
+    <path d="M186 512H286" stroke="#7B1E2F" stroke-width="32" stroke-linecap="round"/>
+    <path d="M248 468L292 512L248 556" stroke="#7B1E2F" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M838 512H738" stroke="#7B1E2F" stroke-width="32" stroke-linecap="round"/>
+    <path d="M776 468L732 512L776 556" stroke="#7B1E2F" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+</svg>
