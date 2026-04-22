@@ -69,6 +69,15 @@ WORKFLOWS = [
         "ink": "#40379D",
         "kind": "trim_transparency",
     },
+    {
+        "slug": "copy-contents-to-clipboard",
+        "bundle": "Copy Contents to Clipboard.workflow",
+        "primary": "#FFDA8A",
+        "secondary": "#E68A2B",
+        "glow": "#FFF1D4",
+        "ink": "#7A3D0A",
+        "kind": "copy_clipboard",
+    },
 ]
 
 
@@ -263,6 +272,28 @@ def trim_transparency_symbol(accent: str, ink: str) -> str:
 """
 
 
+def copy_clipboard_symbol(accent: str, ink: str) -> str:
+    return f"""
+  <g filter="url(#objectShadow)">
+    <rect x="276" y="260" width="472" height="556" rx="96" fill="url(#surface)"/>
+    <rect x="276" y="260" width="472" height="556" rx="96" stroke="#FFFFFF" stroke-width="12"/>
+    <rect x="276" y="260" width="472" height="556" rx="96" fill="url(#surfaceShade)"/>
+    <rect x="384" y="226" width="256" height="124" rx="46" fill="{accent}"/>
+    <rect x="384" y="226" width="256" height="124" rx="46" stroke="#FFFFFF" stroke-width="12"/>
+    <rect x="454" y="252" width="116" height="44" rx="22" fill="{ink}" fill-opacity="0.58"/>
+    <path d="M336 452H618" stroke="{ink}" stroke-opacity="0.22" stroke-width="26" stroke-linecap="round"/>
+    <path d="M336 530H688" stroke="{ink}" stroke-opacity="0.22" stroke-width="26" stroke-linecap="round"/>
+    <path d="M336 608H572" stroke="{ink}" stroke-opacity="0.22" stroke-width="26" stroke-linecap="round"/>
+    <path d="M336 686H646" stroke="{ink}" stroke-opacity="0.22" stroke-width="26" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#objectShadow)">
+    <circle cx="722" cy="722" r="96" fill="#FFFFFF"/>
+    <circle cx="722" cy="722" r="96" stroke="{accent}" stroke-width="10"/>
+    <path d="M676 724L710 758L772 694" stroke="{ink}" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+"""
+
+
 def build_svg(workflow: dict[str, str]) -> str:
     accent = workflow["primary"]
     ink = workflow["ink"]
@@ -272,6 +303,7 @@ def build_svg(workflow: dict[str, str]) -> str:
         "convert_png": convert_symbol,
         "open_code": open_code_symbol,
         "trim_transparency": trim_transparency_symbol,
+        "copy_clipboard": copy_clipboard_symbol,
     }[workflow["kind"]](accent, ink)
 
     svg = backdrop_svg(workflow["primary"], workflow["secondary"], workflow["glow"], symbol)

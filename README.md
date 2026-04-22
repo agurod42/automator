@@ -40,6 +40,10 @@ Install ImageMagick and Ghostscript via Homebrew:
 brew install imagemagick ghostscript
 ```
 
+### Copy Contents to Clipboard
+
+This service copies the contents of the selected text file(s) to the clipboard. When multiple files are selected, their contents are concatenated in selection order.
+
 ### Trim Transparent Pixels
 
 This service trims fully transparent borders from images and saves a new PNG beside the original with a `_trimmed.png` suffix so transparency is preserved.
