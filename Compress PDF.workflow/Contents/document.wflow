@@ -59,10 +59,22 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>for f in "$@"
+					<string>processed=0
+for f in "$@"
 do
-	/usr/local/bin/gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${f%.*}_compressed.pdf" "$f"
-done</string>
+	if /usr/local/bin/gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${f%.*}_compressed.pdf" "$f"; then
+		processed=$((processed + 1))
+	fi
+done
+
+if [ "$processed" -eq 0 ]; then
+	msg="No PDFs were compressed"
+elif [ "$processed" -eq 1 ]; then
+	msg="Compressed 1 PDF"
+else
+	msg="Compressed $processed PDFs"
+fi
+MSG="$msg" osascript -e 'display notification (system attribute "MSG") with title "Compress PDF"'</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

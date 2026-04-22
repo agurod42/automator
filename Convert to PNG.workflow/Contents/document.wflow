@@ -85,12 +85,24 @@ if ! command -v gs &amp;&gt;/dev/null; then
 fi
 
 # Convert PDFs to PNG (one file per page)
+processed=0
 for f in "$@"
 do
     base="${f%.*}"
-    magick -density 300 "$f" -quality 100 "${base}_page_%03d.png"
-    echo "Converted: $f"
-done</string>
+    if magick -density 300 "$f" -quality 100 "${base}_page_%03d.png"; then
+        processed=$((processed + 1))
+        echo "Converted: $f"
+    fi
+done
+
+if [ "$processed" -eq 0 ]; then
+    msg="No PDFs were converted"
+elif [ "$processed" -eq 1 ]; then
+    msg="Converted 1 PDF to PNG"
+else
+    msg="Converted $processed PDFs to PNG"
+fi
+MSG="$msg" osascript -e 'display notification (system attribute "MSG") with title "Convert to PNG"'</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

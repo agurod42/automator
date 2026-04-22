@@ -80,6 +80,7 @@ if ! command -v magick &amp;&gt;/dev/null; then
 fi
 
 # Trim transparent borders without cropping opaque images that merely share a flat edge color
+processed=0
 for f in "$@"
 do
     base="${f%.*}"
@@ -117,9 +118,20 @@ do
         continue
     fi
 
-    magick "$f" -auto-orient -crop "$trim_geometry" +repage PNG32:"$out"
-    echo "Trimmed: $out"
-done</string>
+    if magick "$f" -auto-orient -crop "$trim_geometry" +repage PNG32:"$out"; then
+        processed=$((processed + 1))
+        echo "Trimmed: $out"
+    fi
+done
+
+if [ "$processed" -eq 0 ]; then
+    msg="Nothing to trim"
+elif [ "$processed" -eq 1 ]; then
+    msg="Trimmed 1 image"
+else
+    msg="Trimmed $processed images"
+fi
+MSG="$msg" osascript -e 'display notification (system attribute "MSG") with title "Trim Transparent Pixels"'</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

@@ -80,6 +80,7 @@ if ! command -v magick &amp;&gt;/dev/null; then
 fi
 
 # Compress images
+processed=0
 for f in "$@"
 do
     ext="${f##*.}"
@@ -88,18 +89,31 @@ do
 
     case "${ext:l}" in
         jpg|jpeg)
-            magick "$f" -strip -auto-orient -interlace Plane -quality 75 "$out"
+            if magick "$f" -strip -auto-orient -interlace Plane -quality 75 "$out"; then
+                processed=$((processed + 1))
+                echo "Compressed: $out"
+            fi
             ;;
         png)
-            magick "$f" -strip -auto-orient -define png:compression-level=9 -define png:exclude-chunk=all "$out"
+            if magick "$f" -strip -auto-orient -define png:compression-level=9 -define png:exclude-chunk=all "$out"; then
+                processed=$((processed + 1))
+                echo "Compressed: $out"
+            fi
             ;;
         *)
             echo "Unsupported format: $f"
             ;;
     esac
+done
 
-    echo "Compressed: $out"
-done</string>
+if [ "$processed" -eq 0 ]; then
+    msg="No images were compressed"
+elif [ "$processed" -eq 1 ]; then
+    msg="Compressed 1 image"
+else
+    msg="Compressed $processed images"
+fi
+MSG="$msg" osascript -e 'display notification (system attribute "MSG") with title "Compress Image"'</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
