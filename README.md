@@ -16,6 +16,20 @@ A collection of macOS Automator services designed to simplify everyday tasks.
 
 ## Services Overview
 
+Every service except **Open in VSCode** posts a completion notification via `osascript`. The first time one fires, macOS may prompt you to grant notification permission to **Script Editor** (System Settings → Notifications → Script Editor).
+
+### Compress Image
+
+This service compresses JPEG and PNG images with ImageMagick, writing a new file beside each original with a `_compressed` suffix.
+
+#### Requirements
+
+Install ImageMagick via Homebrew:
+
+```sh
+brew install imagemagick
+```
+
 ### Compress PDF
 
 This service reduces the file size of PDFs using Ghostscript.
@@ -43,6 +57,14 @@ brew install imagemagick ghostscript
 ### Copy Contents to Clipboard
 
 This service copies the contents of the selected text file(s) to the clipboard. When multiple files are selected, their contents are concatenated in selection order.
+
+### Open in VSCode
+
+This service opens the selected folder (or the parent directory of the selected file) in a new VSCode window via the `code` CLI.
+
+#### Requirements
+
+Install the `code` CLI from within VSCode: open the Command Palette and run **Shell Command: Install 'code' command in PATH**.
 
 ### Trim Transparent Pixels
 
