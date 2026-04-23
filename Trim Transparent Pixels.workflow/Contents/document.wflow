@@ -61,51 +61,53 @@
 					<key>COMMAND_STRING</key>
 					<string>#!/bin/zsh
 
-# Ensure Homebrew is installed
-if ! command -v brew &amp;&gt;/dev/null; then
-    echo "Homebrew not found. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Finder-invoked Services start with a sanitized PATH that omits Homebrew's
+# bin dirs, so `command -v magick` would otherwise fail on every run and
+# retrigger the Homebrew installer (which asks for sudo 3x).
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-    if [[ -d "/opt/homebrew/bin" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"   # Apple Silicon
-    elif [[ -d "/usr/local/bin" ]]; then
-        eval "$(/usr/local/bin/brew shellenv)"      # Intel
-    fi
-fi
-
-# Ensure ImageMagick is installed
 if ! command -v magick &amp;&gt;/dev/null; then
-    echo "ImageMagick not found. Installing..."
+    if ! command -v brew &amp;&gt;/dev/null; then
+        osascript -e 'display notification "Installing Homebrew. macOS will ask for your password to create /opt/homebrew." with title "Trim Transparent Pixels" subtitle "First-time setup"'
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        if [[ -d "/opt/homebrew/bin" ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [[ -d "/usr/local/bin" ]]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    fi
+
+    osascript -e 'display notification "Installing ImageMagick via Homebrew." with title "Trim Transparent Pixels" subtitle "First-time setup"'
     brew install imagemagick
 fi
 
-# Trim transparent borders without cropping opaque images that merely share a flat edge color
 processed=0
 for f in "$@"
 do
     base="${f%.*}"
     out="${base}_trimmed.png"
 
-    if [[ "$(magick identify -format '%[opaque]' "$f" 2&gt;/dev/null)" == "True" ]]; then
+    header="$(magick identify -format '%[opaque]|%w|%h' "$f" 2&gt;/dev/null)"
+    if [[ -z "$header" ]]; then
+        echo "Skipped (unable to read image): $f"
+        continue
+    fi
+    IFS='|' read -r opaque width height &lt;&lt;&lt; "$header"
+
+    if [[ "$opaque" == "True" ]]; then
         echo "Skipped (no transparent pixels found): $f"
         continue
     fi
 
-    has_transparent_corner=false
-    for gravity in NorthWest NorthEast SouthWest SouthEast
-    do
-        if [[ "$(magick "$f" -auto-orient -gravity "$gravity" -crop 1x1+0+0 -format '%[opaque]' info: 2&gt;/dev/null)" == "False" ]]; then
-            has_transparent_corner=true
-            break
-        fi
-    done
+    corners="$(magick "$f" -auto-orient -alpha extract -format '%[fx:p{0,0}]|%[fx:p{w-1,0}]|%[fx:p{0,h-1}]|%[fx:p{w-1,h-1}]' info: 2&gt;/dev/null)"
+    IFS='|' read -r tl tr bl br &lt;&lt;&lt; "$corners"
 
-    if [[ "$has_transparent_corner" != true ]]; then
+    if (( tl &gt;= 1 &amp;&amp; tr &gt;= 1 &amp;&amp; bl &gt;= 1 &amp;&amp; br &gt;= 1 )); then
         echo "Skipped (transparent pixels are not on the outer border): $f"
         continue
     fi
 
-    original_geometry="$(magick "$f" -auto-orient -format '%wx%h+0+0' info: 2&gt;/dev/null)"
     trim_geometry="$(magick "$f" -auto-orient -alpha extract -trim -format '%wx%h%O' info: 2&gt;/dev/null)"
 
     if [[ -z "$trim_geometry" || "$trim_geometry" == *-1-1 ]]; then
@@ -113,7 +115,7 @@ do
         continue
     fi
 
-    if [[ "$trim_geometry" == "$original_geometry" ]]; then
+    if [[ "$trim_geometry" == "${width}x${height}+0+0" ]]; then
         echo "Skipped (no transparent border to trim): $f"
         continue
     fi

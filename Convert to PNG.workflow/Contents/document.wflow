@@ -61,27 +61,32 @@
 					<key>COMMAND_STRING</key>
 					<string>#!/bin/zsh
 
-# Ensure Homebrew is installed
-if ! command -v brew &amp;&gt;/dev/null; then
-    echo "Homebrew not found. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Finder-invoked Services start with a sanitized PATH that omits Homebrew's
+# bin dirs, so `command -v magick`/`gs` would otherwise fail on every run
+# and retrigger the Homebrew installer (which asks for sudo 3x).
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-    if [[ -d "/opt/homebrew/bin" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"   # Apple Silicon
-    elif [[ -d "/usr/local/bin" ]]; then
-        eval "$(/usr/local/bin/brew shellenv)"      # Intel
+if ! command -v magick &amp;&gt;/dev/null || ! command -v gs &amp;&gt;/dev/null; then
+    if ! command -v brew &amp;&gt;/dev/null; then
+        osascript -e 'display notification "Installing Homebrew. macOS will ask for your password to create /opt/homebrew." with title "Convert to PNG" subtitle "First-time setup"'
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        if [[ -d "/opt/homebrew/bin" ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [[ -d "/usr/local/bin" ]]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
     fi
-fi
 
-# Ensure ImageMagick and Ghostscript are installed
-if ! command -v magick &amp;&gt;/dev/null; then
-    echo "ImageMagick not found. Installing..."
-    brew install imagemagick
-fi
+    if ! command -v magick &amp;&gt;/dev/null; then
+        osascript -e 'display notification "Installing ImageMagick via Homebrew." with title "Convert to PNG" subtitle "First-time setup"'
+        brew install imagemagick
+    fi
 
-if ! command -v gs &amp;&gt;/dev/null; then
-    echo "Ghostscript not found. Installing..."
-    brew install ghostscript
+    if ! command -v gs &amp;&gt;/dev/null; then
+        osascript -e 'display notification "Installing Ghostscript via Homebrew." with title "Convert to PNG" subtitle "First-time setup"'
+        brew install ghostscript
+    fi
 fi
 
 # Convert PDFs to PNG (one file per page)
