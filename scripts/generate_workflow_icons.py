@@ -43,6 +43,15 @@ WORKFLOWS = [
         "kind": "compress_pdf",
     },
     {
+        "slug": "compress-video",
+        "bundle": "Compress Video.workflow",
+        "primary": "#FFAEDB",
+        "secondary": "#C73AA8",
+        "glow": "#FFE0F2",
+        "ink": "#5F1247",
+        "kind": "compress_video",
+    },
+    {
         "slug": "convert-to-png",
         "bundle": "Convert to PNG.workflow",
         "primary": "#88DBFF",
@@ -236,6 +245,24 @@ def compress_pdf_symbol(accent: str, ink: str) -> str:
     return paper_group(ink, extra=badge) + inward_side_arrows(ink)
 
 
+def compress_video_symbol(accent: str, ink: str) -> str:
+    frame = f"""
+  <g filter="url(#objectShadow)">
+    <rect x="246" y="298" width="532" height="428" rx="104" fill="url(#surface)"/>
+    <rect x="246" y="298" width="532" height="428" rx="104" stroke="#FFFFFF" stroke-width="12"/>
+    <rect x="280" y="332" width="44" height="60" rx="14" fill="{ink}" fill-opacity="0.18"/>
+    <rect x="280" y="632" width="44" height="60" rx="14" fill="{ink}" fill-opacity="0.18"/>
+    <rect x="700" y="332" width="44" height="60" rx="14" fill="{ink}" fill-opacity="0.18"/>
+    <rect x="700" y="632" width="44" height="60" rx="14" fill="{ink}" fill-opacity="0.18"/>
+    <circle cx="512" cy="512" r="118" fill="{accent}" fill-opacity="0.92"/>
+    <circle cx="512" cy="512" r="118" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="6" fill="none"/>
+    <path d="M488 452L596 512L488 572Z" fill="{ink}"/>
+    <rect x="246" y="298" width="532" height="428" rx="104" fill="url(#surfaceShade)"/>
+  </g>
+"""
+    return frame + inward_side_arrows(ink)
+
+
 def open_code_symbol(accent: str, ink: str) -> str:
     return folder_group(accent, ink)
 
@@ -300,6 +327,7 @@ def build_svg(workflow: dict[str, str]) -> str:
     symbol = {
         "compress_image": compress_image_symbol,
         "compress_pdf": compress_pdf_symbol,
+        "compress_video": compress_video_symbol,
         "convert_png": convert_symbol,
         "open_code": open_code_symbol,
         "trim_transparency": trim_transparency_symbol,

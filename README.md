@@ -42,6 +42,18 @@ Install Ghostscript via Homebrew:
 brew install ghostscript
 ```
 
+### Compress Video
+
+This service compresses video files with ffmpeg (H.264 + AAC, CRF 28), writing a new MP4 beside each original with a `_compressed.mp4` suffix.
+
+#### Requirements
+
+Install ffmpeg via Homebrew:
+
+```sh
+brew install ffmpeg
+```
+
 ### Convert to PNG
 
 This service converts each page of a PDF into PNG files using ImageMagick and Ghostscript.
